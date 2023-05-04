@@ -1,4 +1,4 @@
-name: Build MikaKernel
+name: Build KVM Support Kernel
 on:
   workflow_dispatch:
 jobs:
