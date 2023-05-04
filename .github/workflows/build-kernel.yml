@@ -25,8 +25,8 @@ jobs:
           mkdir clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r416183b1.tar.gz && tar -C clang/ -zxvf clang-*.tar.gz
       - name: Pull kernel source
         run: |
-          wget ${{ env.KERNEL_SOURCE }} ; tar -xvf 4a0cd0dd4399ed76c1d09b9bf6a218ccd0494f80.tar.gz ; mv android_kernel_oppo_mt6877-4a0cd0dd4399ed76c1d09b9bf6a218ccd0494f80 kernel-source
-          git clone https://github.com/dabao1955/vendor
+          git clone ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} kernel-source
+          git clone https://github.com/oppo-source/android_kernel_modules_oppo_mt6893 1 ; cp 1/source/vendor ./
           echo "KERNEL_VERSION="$(cat kernel-source/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
