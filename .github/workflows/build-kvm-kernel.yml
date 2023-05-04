@@ -39,11 +39,10 @@ jobs:
                                   CROSS_COMPILE=$GITHUB_WORKSPACE/aarch64-linux-android-4.9/bin/aarch64-linux-android- \
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
           cd kernel-source
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
+          echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
+          echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
+          echo "CONFIG_KVM=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
+          echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
           echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
           make ${args} ${{ env.KERNEL_TARGET }}_defconfig
           make -j64 ${args}
