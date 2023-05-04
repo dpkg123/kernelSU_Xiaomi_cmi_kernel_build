@@ -41,11 +41,11 @@ jobs:
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
           cd kernel-source
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/oplus6893_defconfig
+          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/oplus6893_defconfig
+          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/oplus6893_defconfig
+          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/oplus6893_defconfig
+          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6893_defconfig
           make ${args} ${{ env.KERNEL_TARGET }}_defconfig
           make -j64 ${args}
       - name: Package kernel
