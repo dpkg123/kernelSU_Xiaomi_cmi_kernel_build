@@ -46,7 +46,7 @@ jobs:
           echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/oplus6893_defconfig
           echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/oplus6893_defconfig
           echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6893_defconfig
-          make ${args} ${{ env.KERNEL_TARGET }}_defconfig
+          make ${args} oplus6877_defconfig
           make -j64 ${args}
       - name: Package kernel
         run: |
