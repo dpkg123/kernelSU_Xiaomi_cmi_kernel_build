@@ -25,7 +25,7 @@ jobs:
           mkdir clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r416183b1.tar.gz && tar -C clang/ -zxvf clang-*.tar.gz
       - name: Pull kernel source
         run: |
-          git clone https://github.com/realme-kernel-opensource/realme_X7max_GTneo_Q3pro_GTneo2T-AndroidS-kernel-source/ kernel-source
+          git clone https://github.com/mishant6342/kernel_realme_RMX3031 kernel-source
           echo "KERNEL_VERSION="$(cat kernel-source/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
@@ -40,12 +40,16 @@ jobs:
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
           cd kernel-source
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/k6893v1_64_20615_defconfig
-          make ${args} k6893v1_64_20615_defconfig
+          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_KVM=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/cupida_defconfig
+          echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/cupida_defconfig
+          make ${args} cupida_defconfig
           make -j64 ${args}
       - name: Package kernel
         run: |
