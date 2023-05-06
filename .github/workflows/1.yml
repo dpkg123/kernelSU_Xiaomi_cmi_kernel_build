@@ -1,4 +1,4 @@
-name: Build OPPO MT6877 Kernel
+name: 1
 on:
   workflow_dispatch:
 jobs:
