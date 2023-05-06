@@ -29,7 +29,7 @@ jobs:
           tar -xvf ./dbe29aecef226e69ced21401cf3c07dca6900ef8.tar.gz
           mv android_kernel_oppo_mt6877-dbe29aecef226e69ced21401cf3c07dca6900ef8/ kernel-source
           git clone https://github.com/oppo-source/android_kernel_modules_oppo_mt6877/
-          mv -v android_kernel_modules_oppo_mt6877/source/vendor vendor ./
+          mv -v android_kernel_modules_oppo_mt6877/source/vendor ./
           echo "KERNEL_VERSION="$(cat kernel-source/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
