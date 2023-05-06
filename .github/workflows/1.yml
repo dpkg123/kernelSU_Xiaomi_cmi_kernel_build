@@ -25,12 +25,12 @@ jobs:
           mkdir clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r383902.tar.gz && tar -C clang/ -zxvf clang-*.tar.gz
       - name: Pull kernel source
         run: |
-          wget https://github.com/oppo-source/android_kernel_oppo_mt6877/archive/4a0cd0dd4399ed76c1d09b9bf6a218ccd0494f80.tar.gz
-          tar -xvf ./4a0cd0dd4399ed76c1d09b9bf6a218ccd0494f80.tar.gz
-          mv android_kernel_oppo_mt6877-4a0cd0dd4399ed76c1d09b9bf6a218ccd0494f80/ kernel-4.14
+          wget https://github.com/oppo-source/android_kernel_oppo_mtk_4.19/archive/f1ac3e53f433c6b68e2f6f37191e488d2bd41557.tar.gz
+          tar -xvf ./f1ac3e53f433c6b68e2f6f37191e488d2bd41557.tar.gz
+          mv android_kernel_oppo_mtk_4.19-f1ac3e53f433c6b68e2f6f37191e488d2bd41557 kernel-4.19
           git clone https://github.com/oppo-source/android_kernel_modules_oppo_mt6877/
           mv -v android_kernel_modules_oppo_mt6877/source/vendor ./
-          echo "KERNEL_VERSION="$(cat kernel-4.14/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
+          echo "KERNEL_VERSION="$(cat kernel-4.19/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
           export KBUILD_BUILD_USER="dabao1955"
@@ -42,12 +42,12 @@ jobs:
                                   CLANG_TRIPLE=aarch64-linux-gnu- \
                                   CROSS_COMPILE=$GITHUB_WORKSPACE/aarch64-linux-android-4.9/bin/aarch64-linux-android- \
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
-          cd kernel-4.14
-          echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_KVM=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/oplus6877_defconfig
-          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          cd kernel-4.19
+          echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/k6877v1_64_k419_defconfig
+          echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/k6877v1_64_k419_defconfig
+          echo "CONFIG_KVM=y" >> ./arch/arm64/configs/k6877v1_64_k419_defconfig
+          echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/k6877v1_64_k419_defconfig
+          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/k6877v1_64_k419_defconfig
           make ${args} ${{ env.KERNEL_TARGET }}_defconfig
           make -j64 ${args}
       - name: Package kernel
