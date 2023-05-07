@@ -28,7 +28,7 @@ jobs:
           wget https://github.com/oppo-source/android_kernel_oppo_mtk_4.19/archive/f1ac3e53f433c6b68e2f6f37191e488d2bd41557.tar.gz
           tar -xpf ./f1ac3e53f433c6b68e2f6f37191e488d2bd41557.tar.gz
           mv android_kernel_oppo_mtk_4.19-f1ac3e53f433c6b68e2f6f37191e488d2bd41557 kernel-4.19 -v
-          git clone https://github.com/oppo-source/android_kernel_modules_oppo_mt6877/
+          git clone https://github.com/oppo-source/android_kernel_modules_oppo_mtk_4.19/
           cp android_kernel_modules_oppo_mt6877/source/vendor ./ -R
           cp android_kernel_modules_oppo_mt6877/source/vendor kernel-4.19 -R
           echo "KERNEL_VERSION="$(cat kernel-4.19/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
