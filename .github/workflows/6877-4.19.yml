@@ -25,9 +25,9 @@ jobs:
           mkdir clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r383902.tar.gz && tar -C clang/ -zxvf clang-*.tar.gz
       - name: Pull kernel source
         run: |
-          wget https://github.com/oppo-source/android_kernel_oppo_mtk_4.19/archive/f1ac3e53f433c6b68e2f6f37191e488d2bd41557.tar.gz
-          tar -xpf ./f1ac3e53f433c6b68e2f6f37191e488d2bd41557.tar.gz
-          mv android_kernel_oppo_mtk_4.19-f1ac3e53f433c6b68e2f6f37191e488d2bd41557 kernel-4.19 -v
+          wget https://github.com/dabao1955/android_kernel_OPPO_PEQM00/archive/6b2152b6774c91ac663f43f381abfddeddb25c70.tar.gz
+          tar -xpf ./6b2152b6774c91ac663f43f381abfddeddb25c70.tar.gz
+          mv android_kernel_OPPO_PEQM00-6b2152b6774c91ac663f43f381abfddeddb25c70 kernel-4.19 -v
           git clone https://github.com/oppo-source/android_kernel_modules_oppo_mtk_4.19/
           cp android_kernel_modules_oppo_mtk_4.19/vendor ./ -R
           mkdir -p ../vnd
