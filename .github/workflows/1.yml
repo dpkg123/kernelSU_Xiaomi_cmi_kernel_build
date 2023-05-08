@@ -75,4 +75,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: kernel
-          path: AnyKernel3/*
+          path: AnyKernel3/Image*
