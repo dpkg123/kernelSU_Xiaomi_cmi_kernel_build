@@ -53,7 +53,7 @@ jobs:
           echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           make ${args} vendor/r6p_nodtb_defconfig
-          make -j64 ${args}
+          make -j$(nproc) ${args}
       - name: Package kernel
         run: |
           git clone --depth=1 ${{ env.ANYKERNEL_SOURCE }} -b ${{ env.ANYKERNEL_SOURCE_BRANCH }} AnyKernel3 && rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md
@@ -72,5 +72,5 @@ jobs:
       - name: Upload kernel to artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.KERNEL_VERSION }}_${{ env.KERNEL_TARGET }}
-          path: AnyKernel3/*
+          name: kernel
+          path: AnyKernel3/Image*
