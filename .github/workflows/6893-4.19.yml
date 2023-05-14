@@ -27,7 +27,7 @@ jobs:
         run: |
           wget https://github.com/dpkg123/android_kernel_xiaomi_mt6895/archive/891f07024712fb57321238a0440c0bf656878ed5.tar.gz
           tar -xpf ./891f07024712fb57321238a0440c0bf656878ed5.tar.gz
-          mv android_kernel_xiaomi_mt6895 kernel-4.19 -v
+          mv android_kernel_xiaomi_mt6895-891f07024712fb57321238a0440c0bf656878ed5 kernel-4.19 -v
           echo "KERNEL_VERSION="$(cat kernel-4.19/arch/arm64/configs/vendor/k50_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
