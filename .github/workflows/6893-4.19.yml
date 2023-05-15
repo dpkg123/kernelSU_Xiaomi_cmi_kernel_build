@@ -24,9 +24,9 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-9.0.0_r32
       - name: Pull kernel source
         run: |
-          wget https://github.com/dabao1955/android_kernel_oddo_sdm660/archive/b7c99a79d7648ec40d1a863e42f55740d1f1d226.tar.gz
-          tar -xpf ./b7c99a79d7648ec40d1a863e42f55740d1f1d226.tar.gz
-          mv android_kernel_oddo_sdm660-b7c99a79d7648ec40d1a863e42f55740d1f1d226 kernel-4.19 -v
+          wget https://github.com/dabao1955/android_kernel_oddo_sdm660/archive/0eaf62bed9f1a44bf8fa9c88a700c0ead9eea60e.tar.gz
+          tar -xpf ./0eaf62bed9f1a44bf8fa9c88a700c0ead9eea60e.tar.gz
+          mv android_kernel_oddo_sdm660-0eaf62bed9f1a44bf8fa9c88a700c0ead9eea60e kernel-4.19 -v
           echo "KERNEL_VERSION="$(cat kernel-4.19/arch/arm64/configs/sdm660-perf_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
