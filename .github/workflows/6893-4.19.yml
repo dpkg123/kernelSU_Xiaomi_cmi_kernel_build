@@ -24,10 +24,10 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b nougat-mr2.3-release
       - name: Pull kernel source
         run: |
-          wget https://github.com/xiaocheng20/android_kernel_oppo_r9s/archive/63b1c756a67865ad09a973a2195cade95e2daff3.tar.gz
-          tar -xpf ./63b1c756a67865ad09a973a2195cade95e2daff3.tar.gz
-          mv android_kernel_oppo_r9s-63b1c756a67865ad09a973a2195cade95e2daff3 kernel-4.19 -v
-          echo "KERNEL_VERSION="$(cat kernel-4.19/arch/arm64/configs/r9s_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
+          wget https://github.com/dpkg123/android_kernel_oppo_r9s/commit/11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
+          tar -xpf ./11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
+          mv android_kernel_oppo_r9s-11eb9d6389b26964841f81f97ddbc6a34574c1fd kernel-3.18 -v
+          echo "KERNEL_VERSION="$(cat kernel-3.18/arch/arm64/configs/r9s_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
       - name: Build kernel
         run: |
           export KBUILD_BUILD_USER="dabao1955"
@@ -38,7 +38,7 @@ jobs:
                                   CLANG_TRIPLE=aarch64-linux-gnu- \
                                   CROSS_COMPILE=$GITHUB_WORKSPACE/aarch64-linux-android-4.9/bin/aarch64-linux-android- \
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
-          chmod 755 -R kernel-4.19
+          chmod 755 -R kernel-3.18
           cd kernel-4.19
           sudo rm -rf out
           sudo mkdir out
