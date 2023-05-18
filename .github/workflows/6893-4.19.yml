@@ -24,7 +24,7 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b nougat-mr2.3-release
       - name: Pull kernel source
         run: |
-          wget https://github.com/dpkg123/android_kernel_oppo_r9s/commit/11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
+          wget https://github.com/dpkg123/android_kernel_oppo_r9s/archive/11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
           tar -xpf ./11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
           mv android_kernel_oppo_r9s-11eb9d6389b26964841f81f97ddbc6a34574c1fd kernel-3.18 -v
           echo "KERNEL_VERSION="$(cat kernel-3.18/arch/arm64/configs/r9s_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
