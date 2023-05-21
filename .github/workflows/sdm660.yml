@@ -1,4 +1,4 @@
-name: 6893-4.19
+name: sdm660
 on:
   workflow_dispatch:
 jobs:
