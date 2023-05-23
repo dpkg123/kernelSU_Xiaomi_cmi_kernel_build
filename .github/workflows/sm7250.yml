@@ -58,9 +58,10 @@ jobs:
 
           mv android_kernel_oppo_sm7250-554371aca734463e121f040efa9e5d2001603ed9/ kernel-4.14
 
-          git clone https://github.com/oppo-source/android_kernel_modules_and_devicetree_oppo_sm7250 source
+          git clone https://github.com/oppo-source/android_kernel_modules_and_devicetree_oppo_sm7250
 
-          cp android_kernel_modules_oppo_mt6877/source/* ./ -R
+          cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/wakelock_profiler ./an -R
+          cp android_kernel_modules_and_devicetree_oppo_sm7250/* ../ -R
 
           echo "KERNEL_VERSION="$(cat kernel-4.14/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
 
