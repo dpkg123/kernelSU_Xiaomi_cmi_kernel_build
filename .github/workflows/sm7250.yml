@@ -59,9 +59,11 @@ jobs:
           mv android_kernel_oppo_sm7250-554371aca734463e121f040efa9e5d2001603ed9/ kernel-4.14
 
           git clone https://github.com/oppo-source/android_kernel_modules_and_devicetree_oppo_sm7250
+          rm -rf -v kernel-4.14/drivers/soc/oplus/owakelock kernel-4.14/net/oplus_modules
 
-          cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/wakelock_profiler ./an -R
-          cp android_kernel_modules_and_devicetree_oppo_sm7250/* ../ -R
+          cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/wakelock_profiler ./kernel4.14/drivers/soc/oplus/owakelock -R -v
+          cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/network ./kernel-4.14/net/oplus_modules -R -v
+          cp android_kernel_modules_and_devicetree_oppo_sm7250/* ../ -R -v
 
           echo "KERNEL_VERSION="$(cat kernel-4.14/arch/arm64/configs/${{ env.KERNEL_TARGET }}_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
 
@@ -91,25 +93,15 @@ jobs:
 
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 
-          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          echo "CONFIG_MODULES=y" >> ./arch/arm64/configs/vendor/_defconfig
 
-          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          echo "CONFIG_KPROBES=y" >> ./arch/arm64/configs/vendor/_defconfig
 
-          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          echo "CONFIG_HAVE_KPROBES=y" >> ./arch/arm64/configs/vendor/_defconfig
 
-          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          echo "CONFIG_KPROBE_EVENTS=y" >> ./arch/arm64/configs/vendor/_defconfig
 
-          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6877_defconfig
-
-          echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/oplus6877_defconfig
-
-          echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/oplus6877_defconfig
-
-          echo "CONFIG_KVM=y" >> ./arch/arm64/configs/oplus6877_defconfig
-
-          echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/oplus6877_defconfig
-
-          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6877_defconfig
+          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/vendor/_defconfig
 
           make ${args} ${{ env.KERNEL_TARGET }}_defconfig
 
@@ -132,5 +124,24 @@ jobs:
           elif [[ -f out/arch/arm64/boot/Image.gz ]]; then
 
             cp out/arch/arm64/boot/Image.gz AnyKernel3/Image.gz
+            elif [[ -f out/arch/arm64/boot/Image ]]; then
 
-  
+            cp out/arch/arm64/boot/Image AnyKernel3/Image
+
+          fi
+
+          if [ -f out/arch/arm64/boot/dtbo.img ]; then
+
+            cp out/arch/arm64/boot/dtbo.img AnyKernel3/dtbo.img
+
+          fi
+
+      - name: Upload kernel to artifact
+
+        uses: actions/upload-artifact@v3
+
+        with:
+
+          name: kernel
+
+          path: AnyKernel3/*
