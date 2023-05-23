@@ -61,7 +61,7 @@ jobs:
           git clone https://github.com/oppo-source/android_kernel_modules_and_devicetree_oppo_sm7250
           rm -rf -v kernel-4.14/drivers/soc/oplus/owakelock kernel-4.14/net/oplus_modules
 
-          cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/wakelock_profiler ./kernel4.14/drivers/soc/oplus/owakelock -R -v
+          cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/wakelock_profiler ./kernel-4.14/drivers/soc/oplus/owakelock -R -v
           cp android_kernel_modules_and_devicetree_oppo_sm7250/vendor/oplus/kernel/network ./kernel-4.14/net/oplus_modules -R -v
           cp android_kernel_modules_and_devicetree_oppo_sm7250/* ../ -R -v
 
