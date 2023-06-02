@@ -131,5 +131,26 @@ jobs:
           elif [[ -f out/arch/arm64/boot/Image.gz ]]; then
 
             cp out/arch/arm64/boot/Image.gz AnyKernel3/Image.gz
+          elif [[ -f out/arch/arm64/boot/Image ]]; then
+
+            cp out/arch/arm64/boot/Image AnyKernel3/Image
+
+          fi
+
+          if [ -f out/arch/arm64/boot/dtbo.img ]; then
+
+            cp out/arch/arm64/boot/dtbo.img AnyKernel3/dtbo.img
+
+          fi
+
+      - name: Upload kernel to artifact
+
+        uses: actions/upload-artifact@v3
+
+        with:
+
+          name: kernel
+
+          path: AnyKernel3/*
 
   
