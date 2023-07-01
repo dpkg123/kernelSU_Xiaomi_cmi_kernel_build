@@ -55,7 +55,7 @@ jobs:
           echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/oplus6877_defconfig
           echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6877_defconfig
           make ${args} ${{ env.KERNEL_TARGET }}_defconfig
-          make -j64 ${args}
+          make -j64 ${args} CC=$GITHUB_WORKSPACE/clang/bin/clang
       - name: Package kernel
         run: |
           git clone --depth=1 ${{ env.ANYKERNEL_SOURCE }} -b ${{ env.ANYKERNEL_SOURCE_BRANCH }} AnyKernel3 && rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md
