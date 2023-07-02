@@ -52,7 +52,7 @@ jobs:
           echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
-          bash /home/runner/work/kernelSU_Xiaomi_cmi_kernel_build/kernelSU_Xiaomi_cmi_kernel_build/kernel-4.19/build.sh
+          bash build_kernel.sh
       - name: Package kernel
         run: |
           ls 
