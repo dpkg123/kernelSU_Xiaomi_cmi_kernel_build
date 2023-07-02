@@ -20,6 +20,7 @@ jobs:
           apt-cache search aarch64
       - name: Pull toolchain
         run: |
+          cd $HOME
           git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 aarch64-linux-android-4.9
           git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 arm-linux-androideabi-4.9
           mkdir clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r383902.tar.gz && tar -C clang/ -zxvf clang-*.tar.gz
@@ -51,8 +52,7 @@ jobs:
           echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
-          make ${args} vendor/full/r6p_nodtb_defconfig
-          make -j$(nproc) ${args}
+          bash build.sh
       - name: Package kernel
         run: |
           ls 
