@@ -25,9 +25,9 @@ jobs:
           mkdir clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r383902.tar.gz && tar -C clang/ -zxvf clang-*.tar.gz
       - name: Pull kernel source
         run: |
-          wget https://github.com/dabao1955/android_kernel_OPPO_PEQM00/archive/d1c7e0b043138d9723d279c770948aa696692e3f.tar.gz
-          tar -xpf ./d1c7e0b043138d9723d279c770948aa696692e3f.tar.gz
-          mv android_kernel_OPPO_PEQM00-d1c7e0b043138d9723d279c770948aa696692e3f kernel-4.19 -v
+          wget https://github.com/dabao1955/android_kernel_OPPO_PEQM00/archive/refs/heads/4.19-ksu-dev.zip
+          unzip 4.19-ksu-dev.zip
+          mv android_kernel_OPPO_PEQM00-4.19-ksu-dev kernel-4.19 -v
           git clone https://github.com/oppo-source/android_kernel_modules_oppo_mtk_4.19/
           cp android_kernel_modules_oppo_mtk_4.19/vendor ./ -R
           mkdir -p ../vnd
@@ -46,12 +46,11 @@ jobs:
                                   CROSS_COMPILE=$GITHUB_WORKSPACE/aarch64-linux-android-4.9/bin/aarch64-linux-android- \
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
           cd kernel-4.19
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+          bash setup.sh
           echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
           echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
-          echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/vendor/full/r6p_nodtb_defconfig
           make ${args} vendor/full/r6p_nodtb_defconfig
           make -j$(nproc) ${args}
       - name: Package kernel
