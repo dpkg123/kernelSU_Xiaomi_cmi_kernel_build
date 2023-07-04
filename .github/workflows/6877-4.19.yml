@@ -27,7 +27,7 @@ jobs:
       - name: Pull kernel source
         run: |
           wget https://github.com/dabao1955/android_kernel_OPPO_PEQM00/archive/refs/heads/4.19.zip
-          unzip 4.19-ksu-dev.zip
+          unzip 4.19.zip
           mv android_kernel_OPPO_PEQM00-4.19 kernel-4.19 -v
           git clone https://github.com/oppo-source/android_kernel_modules_oppo_mtk_4.19/
           cp android_kernel_modules_oppo_mtk_4.19/vendor ./ -R
