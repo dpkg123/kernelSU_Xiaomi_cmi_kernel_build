@@ -110,7 +110,7 @@ jobs:
 
           echo "CONFIG_OVERLAY_FS=y" >> ./arch/arm64/configs/oplus6877_defconfig
 
-          make ${args} ${{ env.KERNEL_TARGET }}_defconfig
+          make ${args} oplus6877_defconfig
 
           make -j64 ${args}
 
