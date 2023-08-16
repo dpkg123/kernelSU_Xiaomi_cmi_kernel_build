@@ -1,68 +1,109 @@
-name: 6893-4.19
+name: build kernel - OPPO Reno6 Pro
+
 on:
+
   workflow_dispatch:
+
 jobs:
+
   build-kernel:
+
     runs-on: ubuntu-latest
+
     steps:
+
       - uses: actions/checkout@v3
+
       - name: Setup environment
+
         run: |
-          echo "ANYKERNEL_SOURCE=$(cat config.env | grep -w "ANYKERNEL_SOURCE" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
-          echo "ANYKERNEL_SOURCE_BRANCH=$(cat config.env | grep -w "ANYKERNEL_SOURCE_BRANCH" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
-          echo "KERNEL_SOURCE=$(cat config.env | grep -w "KERNEL_SOURCE" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
-          echo "KERNEL_SOURCE_BRANCH=$(cat config.env | grep -w "KERNEL_SOURCE_BRANCH" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
-          echo "KERNEL_TARGET=$(cat config.env | grep -w "KERNEL_TARGET" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
-          echo "BUILD_ARGS=$(cat config.env | grep -w "BUILD_ARGS" | head -n 1 | cut -d ":" -f 2)" >> $GITHUB_ENV
+
           sudo apt-get update
-          sudo apt-get install python2.7 python2.7-minimal libncurses5-dev libncurses-dev libssl-dev device-tree-compiler bc cpio lib32ncurses5-dev lib32z1 build-essential binutils bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev git
-          which dtc
-          apt-cache search aarch64
+
+          sudo apt-get install ccache libncurses5-dev libncurses-dev libssl-dev device-tree-compiler bc cpio lib32ncurses5-dev lib32z1 build-essential binutils bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev git aria2 -y
+
       - name: Pull toolchain
+
         run: |
-          git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b nougat-mr2.3-release
-          git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b nougat-mr2.3-release
+
+          cd $HOME
+
+          git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 aarch64-linux-android-4.9
+
+          git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 arm-linux-androideabi-4.9
+
+      - name: Pull clang
+
+        run: | 
+        
+          cd $HOME
+
+          git clone https://github.com/dpkg123/clang --depth=5
+
       - name: Pull kernel source
+
         run: |
-          wget https://github.com/dpkg123/android_kernel_oppo_r9s/archive/11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
-          tar -xpf ./11eb9d6389b26964841f81f97ddbc6a34574c1fd.tar.gz
-          mv android_kernel_oppo_r9s-11eb9d6389b26964841f81f97ddbc6a34574c1fd kernel-3.18 -v
-          echo "KERNEL_VERSION="$(cat kernel-3.18/arch/arm64/configs/r9s_defconfig | grep "CONFIG_LOCALVERSION\=" | sed -r 's/.*"(.+)".*/\1/' | sed 's/^.//')"" >> $GITHUB_ENV
-      - name: Build kernel
+
+          aria2c https://github.com/dpkg123/test_kernel/archive/refs/heads/4.19.zip
+
+          unzip test_kernel-4.19.zip
+
+          mv test_kernel-4.19 kernel-4.19 -v
+
+      - name: Pull kernel vendor source
+
         run: |
+
+          git clone https://github.com/oppo-source/android_kernel_modules_oppo_mtk_4.19/
+
+          cp android_kernel_modules_oppo_mtk_4.19/vendor ./ -R
+
+          mkdir -p -v ../vnd
+
+          cp android_kernel_modules_oppo_mtk_4.19/vendor ../vnd -R
+
+          cp android_kernel_modules_oppo_mtk_4.19/vendor/oplus/kernel_4.19/audio/ kernel-4.19/sound/soc/codecs -R -v
+
+      - name: Sync KernelSU
+
+        run: |
+
           export KBUILD_BUILD_USER="dabao1955"
-          export KBUILD_BUILD_HOST="workspace"
-          args="                  ARCH=arm64 \
-                                  O=../out \
-                                  ${{ env.BUILD_ARGS }} \
-                                  CLANG_TRIPLE=aarch64-linux-gnu- \
-                                  CROSS_COMPILE=$GITHUB_WORKSPACE/aarch64-linux-android-4.9/bin/aarch64-linux-android- \
-                                  CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
-          chmod 755 -R kernel-3.18
-          sudo ln -s /usr/bin/python2.7 /usr/bin/python2
-          cd kernel-3.18
-          sudo rm -rf out
-          sudo mkdir out
-          sudo chmod 777 -R out
-          make ${args} ${{ env.KERNEL_TARGET }}_defconfig
-          make -j64 ${args}
-      - name: Package kernel
+          
+          cd /home/runner/work/kernel_build/kernel_build/kernel-4.19
+
+          
+      - name: Setup ccache
+
+        uses: hendrikmuhs/ccache-action@main
+
+        with: 
+          max-size: 8G
+
+      - name: Build KernelSU kernel - OPPO Reno 6 Pro
+
         run: |
-          git clone --depth=1 ${{ env.ANYKERNEL_SOURCE }} -b ${{ env.ANYKERNEL_SOURCE_BRANCH }} AnyKernel3 && rm -rf AnyKernel3/.git AnyKernel3/.github AnyKernel3/LICENSE AnyKernel3/README.md
-          if [[ -f out/arch/arm64/boot/Image.gz-dtb ]]; then
-            cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3/Image.gz-dtb
-          elif [[ -f out/arch/arm64/boot/Image-dtb ]]; then
-            cp out/arch/arm64/boot/Image-dtb AnyKernel3/Image-dtb
-          elif [[ -f out/arch/arm64/boot/Image.gz ]]; then
-            cp out/arch/arm64/boot/Image.gz AnyKernel3/Image.gz
-          elif [[ -f out/arch/arm64/boot/Image ]]; then
-            cp out/arch/arm64/boot/Image AnyKernel3/Image
-          fi
-          if [ -f out/arch/arm64/boot/dtbo.img ]; then
-            cp out/arch/arm64/boot/dtbo.img AnyKernel3/dtbo.img
-          fi
+
+          cd /home/runner/work/kernel_build/kernel_build/kernel-4.19
+
+          mkdir -p -v arch/arm64/configs/vendor/ && cp arch/arm64/configs/r6p_nodtb_defconfig arch/arm64/configs/vendor -v
+          
+          echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
+
+          echo "CONFIG_KVM_ARM_HOST=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
+
+          echo "CONFIG_KVM=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
+
+          echo "CONFIG_KVM_MMIO=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
+
+          curl -SsL https://raw.githubusercontent.com/dabao1955/android_kernel_OPPO_PEQM00/4.19/build_kernel.sh | bash
+
       - name: Upload kernel to artifact
+
         uses: actions/upload-artifact@v3
+
         with:
-          name: ${{ env.KERNEL_VERSION }}_${{ env.KERNEL_TARGET }}
-          path: AnyKernel3/*
+
+          name: kernel
+
+          path: kernel-4.19/out/arch/arm64/boot/*
