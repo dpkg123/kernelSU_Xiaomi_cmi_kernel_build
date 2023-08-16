@@ -86,7 +86,7 @@ jobs:
 
           cd /home/runner/work/kernel_build/kernel_build/kernel-4.19
 
-          mkdir -p -v arch/arm64/configs/vendor/ && cp arch/arm64/configs/r6p_nodtb_defconfig arch/arm64/configs/vendor -v
+          mkdir -p -v arch/arm64/configs/vendor/ && mkdir -p -v arch/arm64/configs/vendor/full && cp arch/arm64/configs/r6p_nodtb_defconfig arch/arm64/configs/vendor/full -v
           
           echo "CONFIG_VIRTUALIZATION=y" >> ./arch/arm64/configs/vendor/r6p_nodtb_defconfig
 
